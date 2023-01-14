@@ -1,0 +1,83 @@
+<form #userForm="ngForm" (ngSubmit)="onSubmit()" style="width: 40%; margin: 0 auto;">
+    <fieldset>
+        <legend>Informations générales</legend>
+        <div class="wrapper">
+            <!--Name-->
+            <div class="item">
+                <label>Nom &nbsp;</label>
+                <div>
+                    <input type="text" [(ngModel)]="UserModel.Nom" name="Nom" #name="ngModel" required minlength="3">
+                    <div *ngIf="name.errors && name.touched" style="color:red">
+                        <small *ngIf="name.errors?.['required']">Le nom est obligatoire.</small>
+                        <small *ngIf="name.errors?.['minlength']">Entrez un nom valide.</small>
+                    </div>
+                </div>
+            </div>
+            <!--Email-->
+            <div class="item">
+                <label>Email &nbsp;</label>
+                <div>
+                    <input type="email" [(ngModel)]="UserModel.Email" name="Email" #email="ngModel" required
+                        pattern="^[a-zA-Z0-9._-]+\.+[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{3}$">
+                    <div *ngIf="email.errors && email.touched" style="color:red">
+                        <small *ngIf="email.errors?.['required']">L'email est obligatoire.</small>
+                        <small *ngIf="email.errors?.['pattern']">Le modèle valide est: xxxxx .yyy@zzz</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <fieldset>
+            <legend>Informations de payement</legend>
+            <div class="wrapper">
+                <!--Card Type-->
+                <div class="item">
+                    <label class="L2">Type de carte &nbsp;</label>
+                    <div>
+                        <select (blur)="validateChoice(cardType.value)" (change)="validateChoice(cardType.value)"
+                            name="TCard" [(ngModel)]="UserModel.TCard" #cardType="ngModel" required>
+                            <option value="default"></option>
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">Mastercard</option>
+                        </select>
+                        <div></div>
+                        <div *ngIf="!choiceNotMade && cardType.touched">
+                            <small style="color:red">Le type de carte est obligatoire.</small>
+                        </div>
+                    </div>
+                </div>
+                <!--Card Number-->
+                <div class="item">
+                    <label class="L2">Numéro carte &nbsp;</label>
+                    <div>
+                        <input type="text" [(ngModel)]="UserModel.NCard" name="NCard" #cardNumber="ngModel" required
+                            minlength="16" maxlength="16">
+                        <div *ngIf="cardNumber.errors && cardNumber.touched" style="color:red">
+                            <small *ngIf="cardNumber.errors?.['required']">Le numéro de carte et obligatoire.</small>
+                            <small *ngIf="cardNumber.errors?.['minlength'] || cardNumber.errors?.['maxlength']">Le
+                                numéro doit contient 16 chiffres.</small>
+                        </div>
+                    </div>
+                </div>
+                <!--Expiration Date-->
+                <div class="item">
+                    <label class="L2">Date expiration &nbsp;</label>
+                    <div>
+                        <input type="date" [(ngModel)]="UserModel.DateExp" name="DateExp" #expirationDate="ngModel"
+                            required>
+                    </div>
+                </div>
+                <!--Code-->
+                <div class="item" *ngIf="choiceNotMade && !cardNumber.errors">
+                    <label class="L2">Code &nbsp;</label>
+                    <div>
+                        <input type="password" [(ngModel)]="UserModel.Code" name="Code" #code="ngModel" required>
+                        <div *ngIf="code.errors && code.touched" style="color:red">
+                            <small *ngIf="code.errors?.['required']">Le Code est obligatoire.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <button type="submit" class="btn" [disabled]="userForm.invalid">Ajouter</button>
+    </fieldset>
+</form>
